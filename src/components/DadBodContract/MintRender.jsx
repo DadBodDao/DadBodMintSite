@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import { mintDiscountedBod, mintFreeBod, mintNormalBod } from '../../store/dadbodSlice';
-import CustomButton from '../layout/CustomButton'
+import CustomButton from '../Layout/CustomButton'
 import FlexColumn from '../Layout/FlexColumn';
 
 function MintRender() {
