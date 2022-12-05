@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
-import CustomButton from '../layout/CustomButton'
 import FlexColumn from '../Layout/FlexColumn';
 import FlexRow from '../layout/FlexRow';
 
