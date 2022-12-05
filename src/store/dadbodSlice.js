@@ -63,9 +63,9 @@ export const initDadbodContractData = (chainId) => {
       (${contract}.get-collection "${collectionPublic}")
       (${contract}.get-bank)
     ]`
-    // console.log(pactCode);
+    console.log(pactCode);
     var result = await dispatch(local(chainId, pactCode, {}, [], 150000, 1e-8, true));
-    // console.log(result);
+    console.log(result);
 
     if (result.result.status = 'success') {
       // console.log(result.result.data);
