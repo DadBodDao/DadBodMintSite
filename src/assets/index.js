@@ -1,0 +1,1 @@
+export { ReactComponent as DadBodLogo } from './DadBodLogo.svg';
