@@ -4,8 +4,8 @@ import { KadenaKodeLogo } from '../../assets';
 import { disconnectProvider } from '../../kda-wallet/store/kadenaSlice';
 import { showConnectWalletModal } from '../../kda-wallet/store/connectWalletModalSlice';
 import reduceToken from '../../kda-wallet/utils/reduceToken';
-import CustomButton from '../layout/CustomButton'
-import FlexRow from '../layout/FlexRow';
+import CustomButton from '../Layout/CustomButton'
+import FlexRow from '../Layout/FlexRow';
 
 function Navbar() {
   const account = useSelector(state => state.kadenaInfo.account);

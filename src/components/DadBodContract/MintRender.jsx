@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { mintDiscountedBod, mintFreeBod, mintNormalBod } from '../../store/dadbodSlice';
 import CustomButton from '../layout/CustomButton'
 import FlexColumn from '../Layout/FlexColumn';
-import FlexRow from '../layout/FlexRow';
 
 function MintRender() {
   const chainId = import.meta.env.VITE_CHAIN_ID

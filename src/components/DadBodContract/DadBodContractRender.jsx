@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux'
 import FlexColumn from '../Layout/FlexColumn';
-import FlexRow from '../layout/FlexRow';
+import FlexRow from '../Layout/FlexRow';
 
 function DadBodContractRender() {
   const dispatch = useDispatch();
