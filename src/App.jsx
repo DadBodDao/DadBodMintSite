@@ -55,6 +55,9 @@ function App() {
 
   return (
     <FlexColumn className="gap-4">
+      <div className="fixed left-2 bottom-2 rounded-md bg-slate-600 py-1 px-2">
+        <span className="text-sm">Chain 1</span>
+      </div>
       <ToastContainer />
       <KadenaEventListener
         onNewTransaction={txToastManager}
