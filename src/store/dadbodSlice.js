@@ -90,7 +90,7 @@ export const initDadbodContractData = (chainId) => {
           dispatch(dadbodSlice.actions.setCollection(collections[i]));
         }
       }
-      dispatch(dadbodSlice.actions.setBank(result.result.data[2]));
+      dispatch(dadbodSlice.actions.setBank(result.result.data[1]));
     }
     else {
       toast.error(`Failed to load contract data, error: ${result.message}.`);
