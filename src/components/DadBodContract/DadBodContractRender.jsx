@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
 import FlexColumn from '../Layout/FlexColumn';
 import FlexRow from '../Layout/FlexRow';
 
@@ -42,16 +42,15 @@ function DadBodContractRender() {
   }, [dadbodCollectionData]);
 
   return (
-    <div className="w-full flex flex-row gap-2 justify-between place-items-center h-40">
-      <div className="h-28">
-      </div>
-      <FlexRow className="gap-10">
-        <FlexColumn>
+    <div className="w-full flex flex-row gap-2 justify-between place-items-center">
+      <div className="h-28"/>
+      <FlexRow className="w-full gap-10">
+        <FlexColumn className="flex-auto w-64">
           {/* <p className='flex-1 text-5xl'>{price} $KDA</p> */}
           <h1 className='text-purple-500 font-extrabold'>{price} $KDA</h1>
           <p className='text-xl'>Current Price</p>
         </FlexColumn>
-        <FlexColumn>
+        <FlexColumn className="flex-auto w-64">
           {/* <p className='flex-1 text-5xl'>{bodsLeft}</p> */}
           <h1 className='text-red-500 font-extrabold'>{bodsLeft}</h1>
           <p className='text-xl'>Bods Left in Tranche</p>

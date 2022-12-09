@@ -16,8 +16,9 @@ import { DadBodLogo } from './assets';
 import FlexColumn from './components/Layout/FlexColumn';
 import DadBodContractRender from './components/DadBodContract/DadBodContractRender';
 import MintRender from './components/DadBodContract/MintRender';
-import ReservedBods from './components/DadBodContract/ReservedBods';
+import ReservedBods from './components/DadBodContract/DadBodList';
 import reduceToken from './components/KDAWallet/utils/reduceToken';
+import DadBodList from './components/DadBodContract/DadBodList';
 
 function App() {
   const chainId = import.meta.env.VITE_CHAIN_ID
@@ -30,7 +31,7 @@ function App() {
   }
 
   useEffect(() => {
-    initData()
+    initData();
   }, []);
 
   const initAccount = async () => {
@@ -67,8 +68,8 @@ function App() {
       <h1 className='mb-10 font-extrabold'>CLAIM YOUR BOD</h1>
       <DadBodContractRender/>
 
-      <ReservedBods/>
-      
+      <DadBodList/>
+
       {account === '' ? <></> : <MintRender/>}
 
       <CustomButton

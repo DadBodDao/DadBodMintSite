@@ -1,11 +1,11 @@
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
 import { mintDiscountedBod, mintFreeBod, mintNormalBod } from '../../store/dadbodSlice';
-import CustomButton from '../Layout/CustomButton'
+import CustomButton from '../Layout/CustomButton';
 import FlexColumn from '../Layout/FlexColumn';
 
 function MintRender() {
-  const chainId = import.meta.env.VITE_CHAIN_ID
+  const chainId = import.meta.env.VITE_CHAIN_ID;
 
   const dispatch = useDispatch();
   const account = useSelector(state => state.kadenaInfo.account);

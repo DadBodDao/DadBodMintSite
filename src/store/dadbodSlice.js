@@ -11,9 +11,11 @@ export const dadbodSlice = createSlice({
     bank: '',
     collectionDataWhitelistFree: {},
     collectionDataPublic: {},
+    collections: {},
     reservations: [],
     bods: [],
-    items: []
+    bodUris: [],
+    items: {}
   },
   reducers: {
     setCollectionDataWhitelistFree: (state, action) => {
@@ -21,6 +23,9 @@ export const dadbodSlice = createSlice({
     },
     setCollectionDataPublic: (state, action) => {
       state.collectionDataPublic = action.payload;
+    },
+    setCollection: (state, action) => {
+      state.collections[action.payload.name] = action.payload;
     },
     setBank: (state, action) => {
       state.bank = action.payload;
@@ -37,17 +42,20 @@ export const dadbodSlice = createSlice({
     addBod: (state, action) => {
       state.bods.push(action.payload);
     },
+    setBodUris: (state, action) => {
+      state.bodUris = action.payload;
+    },
     setItems: (state, action) => {
       state.items = action.payload;
     },
-    addItem: (state, action) => {
-      state.items.push(action.payload);
+    setItem: (state, action) => {
+      state.items[action.payload['ledger-id']] = action.payload;
     },
   },
 })
 
 export const { 
-  setCollectionDataWhitelistFree, setCollectionDataPublic, setBods, addBod, setItems, addItem
+  setCollectionDataWhitelistFree, setCollectionDataPublic, setBods, addBod, setBodUris, setItems, addItem
 } = dadbodSlice.actions;
 
 export default dadbodSlice.reducer;
@@ -59,18 +67,29 @@ export const initDadbodContractData = (chainId) => {
     let collectionPublic = getState().dadbodInfo.collectionPublic;
     // Get the available free and discount for the user
     var pactCode = `[
-      (${contract}.get-collection "${collectionWhitelistFree}")
-      (${contract}.get-collection "${collectionPublic}")
+      (${contract}.get-all-collections)
       (${contract}.get-bank)
     ]`
-    console.log(pactCode);
+    // console.log(pactCode);
     var result = await dispatch(local(chainId, pactCode, {}, [], 150000, 1e-8, true));
-    console.log(result);
+    // console.log(result);
 
     if (result.result.status = 'success') {
-      // console.log(result.result.data);
-      dispatch(dadbodSlice.actions.setCollectionDataWhitelistFree(result.result.data[0]));
-      dispatch(dadbodSlice.actions.setCollectionDataPublic(result.result.data[1]));
+      let collections = result.result.data[0];
+      // console.log('Collections', collections);
+      for (var i = 0; i < collections.length; i++) {
+        if (collections[i].name === collectionWhitelistFree) {
+          // console.log('init dadbod, whitelist collection: ', collections[i]);
+          dispatch(dadbodSlice.actions.setCollectionDataWhitelistFree(collections[i]));
+        }
+        else if (collections[i].name === collectionPublic) {
+          // console.log('init dadbod, public collection: ', collections[i]);
+          dispatch(dadbodSlice.actions.setCollectionDataPublic(collections[i]));
+        }
+        else {
+          dispatch(dadbodSlice.actions.setCollection(collections[i]));
+        }
+      }
       dispatch(dadbodSlice.actions.setBank(result.result.data[2]));
     }
     else {
@@ -84,11 +103,24 @@ export const initDadbodAccountData = (chainId, account) => {
     let contract = getState().dadbodInfo.contract;
 
     // Get the bods and items for the account
-    var pactCode = `[
-      (${contract}.get-reservations-for-account "${account}")
-      (${contract}.get-all-bods-for-account "${account}")
-      (${contract}.get-all-items-for-account "${account}")
-    ]`
+    var pactCode = `
+      (let
+        (
+          (bods (${contract}.get-all-bods-for-account "${account}"))
+          (get-uri 
+            (lambda (in:object)
+              (free.dadbod.get-uri-for-bod (at "collection" in) (at "id" in))
+            )
+          )
+        )  
+        [
+          (${contract}.get-reservations-for-account "${account}")
+          bods
+          (${contract}.get-all-items-for-account "${account}")
+          (map (get-uri) bods)
+        ]
+      )
+    `
     var result = await dispatch(local(chainId, pactCode, {}, [], 150000, 1e-8, true));
     // console.log(result);
 
@@ -96,7 +128,12 @@ export const initDadbodAccountData = (chainId, account) => {
       // console.log(result.result.data);
       dispatch(dadbodSlice.actions.setReservations(result.result.data[0]));
       dispatch(dadbodSlice.actions.setBods(result.result.data[1]));
-      dispatch(dadbodSlice.actions.setItems(result.result.data[2]));
+      let items = result.result.data[2];
+      for (var i = 0; i < items.length; i++) {
+        console.log(items[i]['ledger-id']);
+        dispatch(dadbodSlice.actions.setItem(items[i]));
+      }
+      dispatch(dadbodSlice.actions.setBodUris(result.result.data[3]));
     }
     else {
       toast.error(`Failed to load user data, error: ${result.message}.`);
@@ -164,7 +201,7 @@ export const mintFreeBod = (chainId, account) => {
 
     // Get the bods and items for the account
     var pactCode = `(${contract}.reserve-free "${collectionWhitelistFree}" "${account}")`;
-    console.log(pactCode);
+    // console.log(pactCode);
     var caps = [
       createCap("Gas", "Allows paying for gas", "coin.GAS", []),
       createCap("WL", "Allows decrementing your free mints", "free.dadbod-whitelist.OWNER", [account]),
