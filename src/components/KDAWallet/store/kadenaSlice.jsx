@@ -1,8 +1,19 @@
 import { createSlice } from '@reduxjs/toolkit';
 import { EVENT_NEW_MSG, EVENT_NEW_TX, EVENT_WALLET_CONNECT } from '../constants/constants';
 import providers from '../providers/providers';
+import { tryLoadLocal, trySaveLocal } from '../utils/store';
 import { createPactCommand, createSigningCommand, listen, localCommand, sendCommand } from '../utils/utils';
 import { hideConnectWalletModal } from './connectWalletModalSlice';
+
+const DADBOD_STORE_ACCOUNT_KEY = 'DADBOD_STORE_ACCOUNT_KEY';
+const DADBOD_STORE_PUBKEY_KEY = 'DADBOD_STORE_PUBKEY_KEY';
+const DADBOD_STORE_PROVIDER_KEY = 'DADBOD_STORE_PROVIDER_KEY';
+var loadedProvider = tryLoadLocal(DADBOD_STORE_PROVIDER_KEY);
+var loadedAccount = tryLoadLocal(DADBOD_STORE_ACCOUNT_KEY);
+var loadedPubKey = tryLoadLocal(DADBOD_STORE_PUBKEY_KEY);
+if (loadedProvider === null) { loadedProvider = ''; }
+if (loadedAccount === null) { loadedAccount = ''; }
+if (loadedPubKey === null) { loadedPubKey = ''; }
 
 export const kadenaSlice = createSlice({
   name: 'kadenaInfo',
@@ -10,9 +21,9 @@ export const kadenaSlice = createSlice({
     network: import.meta.env.VITE_NETWORK,
     networkId: import.meta.env.VITE_NETWORK_ID,
     ttl: 600,
-    provider: '',
-    account: '',
-    pubKey: '',
+    provider: loadedProvider,
+    account: loadedAccount,
+    pubKey: loadedPubKey,
     transactions: [],
     newTransaction: {},
     messages: [],
@@ -72,6 +83,9 @@ export const connectWithProvider = (providerId) => {
       dispatch(kadenaSlice.actions.setProvider(providerId));
       dispatch(kadenaSlice.actions.setAccount(connectResult.account.account));
       dispatch(kadenaSlice.actions.setPubKey(connectResult.account.publicKey));
+      trySaveLocal(DADBOD_STORE_PROVIDER_KEY, providerId);
+      trySaveLocal(DADBOD_STORE_ACCOUNT_KEY, connectResult.account.account);
+      trySaveLocal(DADBOD_STORE_PUBKEY_KEY, connectResult.account.publicKey);
       dispatch(hideConnectWalletModal());
 
       const event = new CustomEvent(EVENT_WALLET_CONNECT, { detail: providerId });
@@ -99,6 +113,10 @@ export const disconnectProvider = () => {
       dispatch(kadenaSlice.actions.setAccount(""));
       dispatch(kadenaSlice.actions.setProvider(""));
       dispatch(kadenaSlice.actions.setPubKey(""));
+      trySaveLocal(DADBOD_STORE_PROVIDER_KEY, '');
+      trySaveLocal(DADBOD_STORE_ACCOUNT_KEY, '');
+      trySaveLocal(DADBOD_STORE_PUBKEY_KEY, '');
+
       const msg = {
         type: 'success',
         data: `Disconnected from ${provider.name}`,
