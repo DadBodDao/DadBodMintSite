@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux';
 import FlexColumn from '../Layout/FlexColumn';
 import FlexRow from '../Layout/FlexRow';
 import DadBodRender from './DadBodRender';
@@ -32,14 +32,21 @@ function DadBodList() {
     
   }, [reservations, userBods, userBodUris]);
 
-  return (
-    <FlexRow className='w-full flex-1 gap-2 justify-around place-items-center '>
-      {dadbodRenders.length >= 0 ? dadbodRenders 
-      :
-      <span>You don't own any dadbods</span>}
-      
-    </FlexRow>
-  )
+  if (dadbodRenders.length > 0) {
+    return (
+      <FlexColumn className='gap-2'>
+        <span className='text-xl font-bold'>Click on a DadBod to view the image and download it</span>
+        <FlexRow className='w-full flex-1 gap-2 justify-around place-items-center '>
+          {dadbodRenders}
+        </FlexRow>
+      </FlexColumn>
+    );
+  }
+  else {
+    return (
+      <span className='text-xl font-bold'>You don't own any DadBods. Mint one! He will show up here!</span>
+    );
+  }
 }
 
 export default DadBodList

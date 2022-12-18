@@ -72,7 +72,7 @@ function App() {
       <DadBodContractRender/>
 
       {account === '' ? 
-        <span>Connect your wallet to see your DadBods</span> 
+        <span className='text-xl font-bold'>Connect your wallet to see your DadBods</span> 
         : 
         <DadBodList/> }
       {account === '' ? <></> : <MintRender/>}
