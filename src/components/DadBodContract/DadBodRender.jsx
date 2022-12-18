@@ -50,17 +50,20 @@ function DadBodRender(props) {
   else if (bod) { // Otherwise, use the bod and uri to load in the actual bod
     // console.log('dadbod render uri', uri);
     return (
-      <div className='relative group w-64 h-64 rounded-md overflow-clip'>
-        <img
-          src={`${uri}.png`}
-        />
-        <div className='absolute inset-0 w-64 h-64 bg-black bg-opacity-80 opacity-0 group-hover:opacity-100 duration-300 p-2'>
-          <span className=' text-xl font-bold mb-10'>{bod['ledger-id']}</span>
-          <FlexColumn className=''>
-            {rarities}
-          </FlexColumn>
+      <a href={`${uri}.png`} download={`dadbod.png`}>
+        <div className='relative group w-64 h-64 rounded-md overflow-clip'>
+          <img
+            src={`${uri}.png`}
+          />
+          <div className='absolute inset-0 w-64 h-64 bg-black bg-opacity-80 opacity-0 group-hover:opacity-100 duration-300 p-2'>
+            <span className=' text-xl font-bold mb-10'>{bod['ledger-id']}</span>
+            <FlexColumn className=''>
+              {rarities}
+            </FlexColumn>
+          </div>
         </div>
-      </div>
+      </a>
+      
     )
   }
 
