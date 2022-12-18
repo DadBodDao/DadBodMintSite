@@ -34,7 +34,10 @@ function DadBodList() {
 
   return (
     <FlexRow className='w-full flex-1 gap-2 justify-around place-items-center '>
-      {dadbodRenders}
+      {dadbodRenders.length >= 0 ? dadbodRenders 
+      :
+      <span>You don't own any dadbods</span>}
+      
     </FlexRow>
   )
 }

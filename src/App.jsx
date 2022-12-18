@@ -71,8 +71,10 @@ function App() {
       <h1 className='mb-10 font-extrabold'>CLAIM YOUR BOD</h1>
       <DadBodContractRender/>
 
-      <DadBodList/>
-
+      {account === '' ? 
+        <span>Connect your wallet to see your DadBods</span> 
+        : 
+        <DadBodList/> }
       {account === '' ? <></> : <MintRender/>}
 
       <CustomButton

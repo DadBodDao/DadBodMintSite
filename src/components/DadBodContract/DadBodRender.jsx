@@ -48,9 +48,9 @@ function DadBodRender(props) {
     )
   }
   else if (bod) { // Otherwise, use the bod and uri to load in the actual bod
-    // console.log('dadbod render uri', uri);
+    // console.log('dadbod render uri', uri); // <a href={`${uri}.png`}>
     return (
-      <a href={`${uri}.png`} download={`dadbod.png`}>
+      <a href={`${uri}.png`}>
         <div className='relative group w-64 h-64 rounded-md overflow-clip'>
           <img
             src={`${uri}.png`}
